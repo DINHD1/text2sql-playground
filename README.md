@@ -24,15 +24,18 @@ Follow these steps:
 
 ```sh
 # Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone https://github.com/DINHD1/text2sql-playground
 
 # Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+cd text2sql-playground
 
-# Step 3: Install the necessary dependencies.
+# Step 3: Run with visual code
+code .
+
+# Step 4: Open new terminal and install the necessary dependencies.
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 5: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
 
