@@ -1,7 +1,7 @@
 # Welcome to your Lovable project
 
 ## Project info
-
+This Python framework builds an enterprise-grade Text-to-SQL system for fixed SQL schemas, like grocery sales databases, enabling natural language queries via Google's Gemini and Gemma models. It auto-generates SQLite queries with schema-aware joins and aggregations, uses few-shot prompting for accuracy, and benchmarks performance (exact match, similarity). Ideal for secure, compliant retail analytics without exposing raw SQL.
 **URL**: https://lovable.dev/projects/f73f05dd-f95e-47d3-95ea-f740d41313e0
 
 ## How can I edit this code?
