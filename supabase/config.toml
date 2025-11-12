@@ -1,1 +1,4 @@
 project_id = "ghdafojbjtpvrzeospma"
+
+[functions.text-to-sql]
+verify_jwt = false

@@ -7,6 +7,7 @@ import { Database, Sparkles, Home } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 interface QueryHistoryEntry {
   timestamp: string;
@@ -26,45 +27,35 @@ const QueryPage = () => {
   const handleQuery = async (question: string, model: string) => {
     setIsLoading(true);
     
-    // Simulate API call - In real app, this would call your backend
     try {
-      // Simulated delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const { data, error } = await supabase.functions.invoke('text-to-sql', {
+        body: { question, model }
+      });
 
-      // Mock SQL generation
-      const mockSQL = `SELECT p.ProductName, SUM(s.TotalPrice) AS Revenue
-FROM sales s 
-JOIN products p ON s.ProductID = p.ProductID
-GROUP BY p.ProductName
-ORDER BY Revenue DESC
-LIMIT 5;`;
+      if (error) throw error;
 
-      setGeneratedSQL(mockSQL);
-
-      // Mock results
-      const mockResults = [
-        { ProductName: "Laptop Pro", Revenue: 125000 },
-        { ProductName: "Smartphone X", Revenue: 98000 },
-        { ProductName: "Tablet Ultra", Revenue: 76500 },
-        { ProductName: "Smartwatch", Revenue: 54200 },
-        { ProductName: "Headphones", Revenue: 43100 },
-      ];
-
-      setResults(mockResults);
+      setGeneratedSQL(data.sql);
+      setResults(data.results || []);
 
       // Add to history
       const newEntry: QueryHistoryEntry = {
         timestamp: new Date().toLocaleString("vi-VN"),
         question,
         model,
-        sql: mockSQL,
-        status: "✅ OK",
+        sql: data.sql,
+        status: data.status === 'error' ? '❌ Error' : "✅ OK",
       };
 
       setHistory((prev) => [newEntry, ...prev]);
-      toast.success("Truy vấn thành công!");
-    } catch (error) {
-      toast.error("Có lỗi xảy ra khi xử lý truy vấn");
+      
+      if (data.status === 'error') {
+        toast.error(data.error || "Có lỗi khi thực thi SQL");
+      } else {
+        toast.success("Truy vấn thành công!");
+      }
+    } catch (error: any) {
+      console.error('Query error:', error);
+      toast.error(error.message || "Có lỗi xảy ra khi xử lý truy vấn");
     } finally {
       setIsLoading(false);
     }
